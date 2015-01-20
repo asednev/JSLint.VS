@@ -1,4 +1,4 @@
-# JSLint.VS
+# JavaScript Linter for Visual Studio (JSLint.VS)
 Visual Studio extension for JavaScript code analysis using JSLint or JSHint.
 
 <strong>JSLint</strong> version 2014-07-08<br />
