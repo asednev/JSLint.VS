@@ -1,5 +1,5 @@
 # JSLint.VS
-Visual Studio extension for running code analysis using JSLint or JSHint.
+Visual Studio extension for JavaScript code analysis using JSLint or JSHint.
 
 <strong>JSLint</strong> version 2014-07-08<br />
 <strong>JSHint</strong> version 2.5.11
