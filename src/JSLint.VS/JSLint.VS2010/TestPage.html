@@ -1,0 +1,21 @@
+<html>
+ <head>
+  <script type="text/javascript" src="fulljslint.js"></script>
+  <script type="text/javascript" src="todoFinder.js"></script>
+  <script type="text/javascript" src="lintRunner.js"></script>
+  <script type="text/javascript">
+
+var run = function() {
+    var js = document.getElementById('inputJs').value;
+    lintRunner({ProcessData:function() {}}, js, {}, {todoFinder:true});
+};
+
+  </script>
+ </head>
+ <body>
+  <form>
+   <textarea cols="100" rows="10" id="inputJs"></textarea>
+   <a onClick="run();return false;">Validate</a>
+  </form>
+ </body>
+</html>

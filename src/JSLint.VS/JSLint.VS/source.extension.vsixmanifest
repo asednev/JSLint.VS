@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+	<Metadata>
+		<Identity Id="702B9D7A-0AC3-443E-A574-372FB2233D30" Version="1.0" Language="en-US" Publisher="Alexey Sednev, Dennis Myren, Luke Page, Matthew Schaad" />
+		<DisplayName>JavaScript Linter</DisplayName>
+		<Description xml:space="preserve">Adds JSLint and JSHint support into Visual Studio</Description>
+		<MoreInfo>http://jslint4vs2010.codeplex.com</MoreInfo>
+		<License>license.txt</License>
+		<Icon>Resources\javascript-logo.png</Icon>
+		<PreviewImage>Resources\Screeshot.png</PreviewImage>
+		<Tags>JavaScript, JSLint, JSHint, Linting</Tags>
+	</Metadata>
+	<Installation>
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="12.0" />
+		<InstallationTarget Version="12.0" Id="Microsoft.VisualStudio.IntegratedShell" />
+		<InstallationTarget Version="12.0" Id="Microsoft.VisualStudio.Premium" />
+		<InstallationTarget Version="12.0" Id="Microsoft.VisualStudio.Ultimate" />
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+		<Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+	</Assets>
+</PackageManifest>

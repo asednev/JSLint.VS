@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A84ED6D3-E8F6-450A-A158-09C1FBC203B5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JSLint.MSBuild</RootNamespace>
+    <AssemblyName>JSLint.MSBuild</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\JSLint.MSBuild.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abstractions\IgnoreErrorSectionsHandler.cs" />
+    <Compile Include="Abstractions\IIgnoreErrorSectionsHandler.cs" />
+    <Compile Include="Abstractions\IJSLinter.cs" />
+    <Compile Include="Abstractions\IJSLintFactory.cs" />
+    <Compile Include="Abstractions\JSLinter.cs" />
+    <Compile Include="Abstractions\JSLintFactory.cs" />
+    <Compile Include="JSLintTask.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Abstractions\FileSystemWrapper.cs" />
+    <Compile Include="Abstractions\IFileSystemWrapper.cs" />
+    <Compile Include="Abstractions\ITaskLoggingHelper.cs" />
+    <Compile Include="Abstractions\ITaskLoggingHelperFactory.cs" />
+    <Compile Include="Abstractions\TaskLoggingHelper.cs" />
+    <Compile Include="Abstractions\TaskLoggingHelperFactory.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Reporters\FormatReporterBase.cs" />
+    <Compile Include="Reporters\HtmlReporter.cs" />
+    <Compile Include="Reporters\IReporter.cs" />
+    <Compile Include="Reporters\IReporterFactory.cs" />
+    <Compile Include="Reporters\ReporterFactory.cs" />
+    <Compile Include="Reporters\TextReporter.cs" />
+    <Compile Include="Reporters\ReporterBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JSLint.Framework\JSLint.Framework.csproj">
+      <Project>{57d4752a-0078-4ee3-adc1-9bd7ee8003bb}</Project>
+      <Name>JSLint.Framework</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HtmlFileFormat.html" />
+    <None Include="Resources\HtmlReportFormat.html" />
+    <None Include="Resources\HtmlViolationFormat.html" />
+    <None Include="Resources\TextReportFormat.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TextFileFormat.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TextViolationFormat.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="JSLint" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <UsingTask AssemblyFile="$(MSBuildProjectDirectory)\..\bin\Debug\JSLint.MSBuild.dll" TaskName="JSLint.MSBuild.JSLintTask" />
+  <Target Name="JSLint">
+    <ItemGroup>
+      <JSLintSourceFiles Include="$(MSBuildProjectDirectory)\Scripts\**\*.js" Exclude="$(MSBuildProjectDirectory)\Scripts\Libraries\**\*.js" />
+    </ItemGroup>
+    <JSLint.MSBuild.JSLintTask SourceFiles="@(JSLintSourceFiles)" OptionsFile="$(MSBuildProjectDirectory)\Options\JSLintOptions.xml" ContinueOnError="ErrorAndContinue">
+      <Output TaskParameter="ViolationCount" ItemName="JSLintViolationCount" />
+      <Output TaskParameter="ViolatingFileCount" ItemName="JSLintViolatingFileCount" />
+      <Output TaskParameter="ProcessedFileCount" ItemName="JSLintProcessedFileCount" />
+    </JSLint.MSBuild.JSLintTask>
+    <Message Text="JSLINTVIOLATIONCOUNT=@(JSLintViolationCount)=JSLINTVIOLATIONCOUNT"></Message>
+    <Message Text="JSLINTVIOLATINGFILECOUNT=@(JSLintViolatingFileCount)=JSLINTVIOLATINGFILECOUNT"></Message>
+    <Message Text="JSLINTPROCESSEDFILECOUNT=@(JSLintProcessedFileCount)=JSLINTPROCESSEDFILECOUNT"></Message>
+  </Target>
+</Project>

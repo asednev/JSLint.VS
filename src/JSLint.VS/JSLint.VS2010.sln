@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2F406DC3-361F-420F-AC7C-2EBD517DD54C}"
+	ProjectSection(SolutionItems) = preProject
+		JSLint.VS2010.vsmdi = JSLint.VS2010.vsmdi
+		Local.testsettings = Local.testsettings
+		TraceAndTestImpact.testsettings = TraceAndTestImpact.testsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSLint.VS2010", "JSLint.VS2010\JSLint.VS2010.csproj", "{971FC5FC-687E-439C-A395-5F728C96FA9F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB} = {57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}
+		{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5} = {6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSLint.VS2010.test", "JSLint.VS2010.test\JSLint.VS2010.test.csproj", "{6651C2A9-E473-45B8-9FE5-714CA36D7241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSLint.Framework", "JSLint.Framework\JSLint.Framework.csproj", "{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSLint.UI", "JSLint.UI\JSLint.UI.csproj", "{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB} = {57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{971FC5FC-687E-439C-A395-5F728C96FA9F}.Debug|x86.ActiveCfg = Debug|x86
+		{971FC5FC-687E-439C-A395-5F728C96FA9F}.Debug|x86.Build.0 = Debug|x86
+		{971FC5FC-687E-439C-A395-5F728C96FA9F}.Release|x86.ActiveCfg = Release|x86
+		{971FC5FC-687E-439C-A395-5F728C96FA9F}.Release|x86.Build.0 = Release|x86
+		{6651C2A9-E473-45B8-9FE5-714CA36D7241}.Debug|x86.ActiveCfg = Debug|x86
+		{6651C2A9-E473-45B8-9FE5-714CA36D7241}.Debug|x86.Build.0 = Debug|x86
+		{6651C2A9-E473-45B8-9FE5-714CA36D7241}.Release|x86.ActiveCfg = Release|x86
+		{6651C2A9-E473-45B8-9FE5-714CA36D7241}.Release|x86.Build.0 = Release|x86
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}.Debug|x86.ActiveCfg = Debug|x86
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}.Debug|x86.Build.0 = Debug|x86
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}.Release|x86.ActiveCfg = Release|x86
+		{57D4752A-0078-4EE3-ADC1-9BD7EE8003BB}.Release|x86.Build.0 = Release|x86
+		{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}.Debug|x86.ActiveCfg = Debug|x86
+		{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}.Debug|x86.Build.0 = Debug|x86
+		{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}.Release|x86.ActiveCfg = Release|x86
+		{6AC7BF72-F9A8-4BAE-85F1-91292F3957A5}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = JSLint.VS2010.vsmdi
+	EndGlobalSection
+EndGlobal

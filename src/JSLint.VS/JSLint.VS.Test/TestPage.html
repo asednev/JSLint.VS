@@ -1,0 +1,61 @@
+<html>
+<head>
+	<script type="text/javascript" src="../JSLint.Framework/JS/fulljslint.js"></script>
+	<script type="text/javascript" src="../JSLint.Framework/JS/jshint.js"></script>
+	<script type="text/javascript" src="../JSLint.Framework/JS/lintRunner.js"></script>
+	<script type="text/javascript">
+
+		function ProcessData(data) {
+
+			var log = document.getElementById("log");
+			log.innerText = "";
+
+			if (data.errors) {
+				data.errors.forEach(function (element) {
+
+					log.innerText += JSON.stringify(element) + "\n";
+					//console.log(element);
+
+				});
+			}
+		}
+		var run = function () {
+			var js = document.getElementById('inputJs').value;
+			var optsRaw = document.getElementById('options').value;
+			var opts = JSON.parse(optsRaw);
+			lintRunner("JSHINT", { ProcessData: ProcessData }, js, opts, { todoFinder: true });
+		};
+
+	</script>
+</head>
+<body>
+	<form>
+		Options:
+		<textarea id="options" cols="200" rows="10">
+{
+"bitwise"       : true,    
+"camelcase"     : false,   
+"curly"         : true,    
+"eqeqeq"        : true,    
+"forin"         : true,    
+"freeze"        : true,    
+"immed"         : false,   
+"indent"        : 4,       
+"latedef"       : false,   
+"newcap"        : false,   
+"noarg"         : true,    
+"noempty"       : true,    
+"nonbsp"        : true,    
+"nonew"         : false,   
+"plusplus"      : false,   
+"quotmark"      : false
+		}
+
+</textarea><br />
+		Javascript:
+		<textarea cols="100" rows="10" id="inputJs"></textarea><br />
+		<button onclick="run(); return false;">Validate</button><br /><br />
+		<pre id="log"></pre>
+	</form>
+</body>
+</html>

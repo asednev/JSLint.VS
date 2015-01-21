@@ -1,0 +1,5 @@
+﻿{0}
+{1}
+({2} processed files, {3} violating files, {4} total violations)
+
+{5}

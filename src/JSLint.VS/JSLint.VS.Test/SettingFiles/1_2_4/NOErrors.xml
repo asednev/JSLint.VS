@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Options xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Enabled>true</Enabled>
+  <ErrorCategory>Error</ErrorCategory>
+  <TODOEnabled>false</TODOEnabled>
+  <TODOCategory>Error</TODOCategory>
+  <RunOnBuild>false</RunOnBuild>
+  <CancelBuildOnError>true</CancelBuildOnError>
+  <JSLintOptions>
+    <BoolOptions />
+    <UseOldVersion>true</UseOldVersion>
+    <ErrorOnUnused>false</ErrorOnUnused>
+    <ErrorOnRepeatedConstant>false</ErrorOnRepeatedConstant>
+    <IndentSize xsi:nil="true" />
+    <MaxLength xsi:nil="true" />
+  </JSLintOptions>
+  <BuildFileTypes>JS HTML CSS</BuildFileTypes>
+  <FakeCSSCharset>false</FakeCSSCharset>
+  <IgnoreErrorStart>/*ignore*/</IgnoreErrorStart>
+  <IgnoreErrorEnd>/*ignore*/</IgnoreErrorEnd>
+  <IgnoreErrorLine>//ignore</IgnoreErrorLine>
+  <RunOnSave>false</RunOnSave>
+</Options>

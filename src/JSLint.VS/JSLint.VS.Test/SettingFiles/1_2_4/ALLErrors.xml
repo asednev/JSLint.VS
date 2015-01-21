@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Options xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Enabled>true</Enabled>
+  <ErrorCategory>Error</ErrorCategory>
+  <TODOEnabled>true</TODOEnabled>
+  <TODOCategory>Error</TODOCategory>
+  <RunOnBuild>true</RunOnBuild>
+  <CancelBuildOnError>true</CancelBuildOnError>
+  <JSLintOptions>
+    <BoolOptions>adsafe bitwise browser cap css debug devel eqeqeq es5 evil forin fragment immed laxbreak newcap nomen on onevar passfail plusplus regexp rhino undef safe windows strict sub white widget tolcontinue</BoolOptions>
+    <UseOldVersion>false</UseOldVersion>
+    <ErrorOnUnused>true</ErrorOnUnused>
+    <ErrorOnRepeatedConstant>true</ErrorOnRepeatedConstant>
+    <IndentSize>4</IndentSize>
+    <MaxLength>90</MaxLength>
+  </JSLintOptions>
+  <BuildFileTypes>JS HTML CSS</BuildFileTypes>
+  <FakeCSSCharset>true</FakeCSSCharset>
+  <IgnoreErrorStart>/*ignore jslint ERRORs*/</IgnoreErrorStart>
+  <IgnoreErrorEnd>/*ignore jslint ERRORs*/</IgnoreErrorEnd>
+  <IgnoreErrorLine>//ignore jslint ERRORs</IgnoreErrorLine>
+  <RunOnSave>false</RunOnSave>
+</Options>

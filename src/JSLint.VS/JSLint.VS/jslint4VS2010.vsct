@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<!--  This is the file that defines the actual layout and type of the commands.
+		It is divided in different sections (e.g. command definition, command
+		placement, ...), with each defining a specific set of properties.
+		See the comment before each section for more details about how to
+		use it. -->
+
+	<!--  The VSCT compiler (the tool that translates this file into the binary 
+		format that VisualStudio will consume) has the ability to run a preprocessor 
+		on the vsct file; this preprocessor is (usually) the C++ preprocessor, so 
+		it is possible to define includes and macros with the same syntax used 
+		in C++ files. Using this ability of the compiler here, we include some files 
+		defining some of the constants that we will use inside the file. -->
+
+	<!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+	<Extern href="stdidcmd.h" />
+
+	<!--This header contains the command ids for the menus provided by the shell. -->
+	<Extern href="vsshlids.h" />
+
+	<!--Definition of some VSCT specific constants. In this sample we use it for the IDs inside the guidOfficeIcon group. -->
+	<!--<Extern href="msobtnid.h" xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" />-->
+
+
+
+
+	<!--The Commands section is where we the commands, menus and menu groups are defined.
+	  This section uses a Guid to identify the package that provides the command defined inside it. -->
+	<Commands package="guidPkg">
+		<!-- Inside this section we have different sub-sections: one for the menus, another  
+	for the menu groups, one for the buttons (the actual commands), one for the combos 
+	and the last one for the bitmaps used. Each element is identified by a command id that  
+	is a unique pair of guid and numeric identifier; the guid part of the identifier is usually  
+	called "command set" and is used to group different command inside a logically related  
+	group; your package should define its own command set in order to avoid collisions  
+	with command ids defined by other packages. -->
+
+
+		<!-- In this section you can define new menu groups. A menu group is a container for 
+		 other menus or buttons (commands); from a visual point of view you can see the 
+		 group as the part of a menu contained between two lines. The parent of a group 
+		 must be a menu. -->
+		<Groups>
+
+			<Group guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" priority="0x0600">
+			</Group>
+
+			<Group guid="guidSourceEditorFragmentCmdSet" id="SourceEditorFragmentMenuGroup" priority="0x0600">
+			</Group>
+
+			<Group guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" priority="0x0600">
+			</Group>
+
+			<Group guid="guidSolutionNodeCmdSet" id="SolutionNodeMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_SOLNNODE" />
+			</Group>
+
+			<Group guid="guidSolutionFolderNodeCmdSet" id="SolutionFolderNodeMenuGroup" priority="0x400">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
+			</Group>
+
+			<Group guid="guidOptionsCmdSet" id="OptionsMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
+			</Group>
+
+			<Group guid="guidErrorListCmdSet" id="ErrorListMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ERRORLIST" />
+			</Group>
+
+		</Groups>
+
+		<!--Buttons section. -->
+		<!--This section defines the elements the user can interact with, like a menu command or a button 
+		or combo box in a toolbar. -->
+		<Buttons>
+			<!--To define a menu group you have to specify its ID, the parent menu and its display priority. 
+		  The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+		  the CommandFlag node.
+		  You can add more than one CommandFlag node e.g.:
+			  <CommandFlag>DefaultInvisible</CommandFlag>
+			  <CommandFlag>DynamicVisibility</CommandFlag>
+		  If you do not want an image next to your command, remove the Icon node or set it to <Icon guid="guidOfficeIcon" id="msotcidNoIcon" /> -->
+
+			<Button guid="guidSourceEditorFragmentCmdSet" id="lint" priority="0x0100" type="Button">
+				<Parent guid="guidSourceEditorFragmentCmdSet" id="SourceEditorFragmentMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>lint</CommandName>
+					<ButtonText>JS Linter Selection</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSourceEditorCmdSet" id="lint" priority="0x0100" type="Button">
+				<Parent guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<Strings>
+					<CommandName>lint</CommandName>
+					<ButtonText>Run JS Linter</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSourceEditorCmdSet" id="globals" priority="0x0101" type="Button">
+				<Parent guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<Strings>
+					<CommandName>globals</CommandName>
+					<ButtonText>Predefine variables...</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidOptionsCmdSet" id="options" priority="0x0100" type="Button">
+				<Parent guid="guidOptionsCmdSet" id="OptionsMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<Strings>
+					<CommandName>options</CommandName>
+					<ButtonText>JavaScript Linter Options...</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionItemCmdSet" id="lint" priority="0x0100" type="Button">
+				<Parent guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>lint</CommandName>
+					<ButtonText>Run JS Linter</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionItemCmdSet" id="exclude" priority="0x0102" type="Button">
+				<Parent guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>exclude</CommandName>
+					<ButtonText>Skip on build (item)</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionItemCmdSet" id="globals" priority="0x0101" type="Button">
+				<Parent guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>globals</CommandName>
+					<ButtonText>Predefine variables...</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionFolderNodeCmdSet" id="excludeFolder" priority="0x0100" type="Button">
+				<Parent guid="guidSolutionFolderNodeCmdSet" id="SolutionFolderNodeMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<Strings>
+					<CommandName>excludeFolder</CommandName>
+					<ButtonText>Skip on build (folder)</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionNodeCmdSet" id="addconfig" priority="0x0100" type="Button">
+				<Parent guid="guidSolutionNodeCmdSet" id="SolutionNodeMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<CommandName>addconfig</CommandName>
+					<ButtonText>Override Linter Options...</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionNodeCmdSet" id="editconfig" priority="0x0101" type="Button">
+				<Parent guid="guidSolutionNodeCmdSet" id="SolutionNodeMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<CommandName>editconfig</CommandName>
+					<ButtonText>Edit Linter Options...</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidSolutionNodeCmdSet" id="removeconfig" priority="0x0102" type="Button">
+				<Parent guid="guidSolutionNodeCmdSet" id="SolutionNodeMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<CommandName>removeconfig</CommandName>
+					<ButtonText>Remove Linter Options</ButtonText>
+				</Strings>
+			</Button>
+
+			<Button guid="guidErrorListCmdSet" id="wipeerrors" priority="0x0101" type="Button">
+				<Parent guid="guidErrorListCmdSet" id="ErrorListMenuGroup" />
+				<Icon guid="guidImages" id="jslintPic" />
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<CommandName>wipeerrors</CommandName>
+					<ButtonText>Clear JS Lint Errors</ButtonText>
+				</Strings>
+			</Button>
+
+		</Buttons>
+
+		<!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+		<Bitmaps>
+			<!--  The bitmap id is defined in a way that is a little bit different from the others: 
+			the declaration starts with a guid for the bitmap strip, then there is the resource id of the 
+			bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
+			inside a button definition. An important aspect of this declaration is that the element id 
+			must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+			<Bitmap guid="guidImages" href="Resources\Images_32bit.bmp" usedList="jslintPic" />
+
+		</Bitmaps>
+
+	</Commands>
+
+
+	<CommandPlacements>
+		<CommandPlacement guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" priority="0x0300">
+			<Parent guid="CMDSETID_HtmEdGrp" id="IDMX_HTM_SOURCE_SCRIPT" />
+		</CommandPlacement>
+		<CommandPlacement guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" priority="0x0300">
+			<Parent guid="CMDSETID_HtmEdGrp" id="IDMX_HTM_SOURCE_HTML" />
+		</CommandPlacement>
+		<CommandPlacement guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" priority="0x0300">
+			<Parent guid="CMDSETID_CssEdGrp" id="IDM_CTX_SOURCE" />
+		</CommandPlacement>
+    <CommandPlacement guid="guidSourceEditorCmdSet" id="SourceEditorMenuGroup" priority="0x0300">
+      <Parent guid="CMDSETID_JsEdGrp" id="IDM_CTX_SOURCE" />
+    </CommandPlacement>
+
+    <CommandPlacement guid="guidSourceEditorFragmentCmdSet" id="SourceEditorFragmentMenuGroup" priority="0x0300">
+			<Parent guid="CMDSETID_HtmEdGrp" id="IDMX_HTM_SOURCE_BASIC" />
+		</CommandPlacement>
+		<CommandPlacement guid="guidSourceEditorFragmentCmdSet" id="SourceEditorFragmentMenuGroup" priority="0x0300">
+			<Parent guid="CMDSETID_HtmEdGrp" id="IDMX_HTM_SOURCE_ASPX" />
+		</CommandPlacement>
+    <CommandPlacement guid="guidSourceEditorFragmentCmdSet" id="SourceEditorFragmentMenuGroup" priority="0x0300">
+      <Parent guid="CMDSETID_JsEdGrp" id="IDM_CTX_SOURCE" />
+    </CommandPlacement>
+
+		<CommandPlacement guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" priority="0x0300">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+		</CommandPlacement>
+		<CommandPlacement guid="guidSolutionItemCmdSet" id="SolutionItemMenuGroup" priority="0x0300">
+			<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_WEBITEMNODE" />
+		</CommandPlacement>
+
+	</CommandPlacements>
+
+	<Symbols>
+
+		<!-- This is the package guid. -->
+		<GuidSymbol name="guidPkg" value="{531da20f-aec5-4382-a317-0f70a217a572}" />
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol name="guidSourceEditorCmdSet" value="{36c9360d-beb4-4ee0-9e7c-75264224c59c}">
+
+			<IDSymbol name="SourceEditorMenuGroup" value="0x1020" />
+			<IDSymbol name="lint" value="0x0100" />
+			<IDSymbol name="globals" value="0x0102" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidSolutionNodeCmdSet" value="{72a924bc-cf95-456b-bc68-edf0b2022c7d}">
+			<IDSymbol name="SolutionNodeMenuGroup" value="0x0100" />
+			<IDSymbol name="addconfig" value="0x0103" />
+			<IDSymbol name="editconfig" value="0x0104" />
+			<IDSymbol name="removeconfig" value="0x0105" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidSourceEditorFragmentCmdSet" value="{45b15f14-e401-462c-8eb0-5fcab4cc3195}">
+			<IDSymbol name="SourceEditorFragmentMenuGroup" value="0x1020" />
+			<IDSymbol name="lint" value="0x0100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidErrorListCmdSet" value="{284b5171-6b47-4cbf-a617-ab8b7d113725}">
+
+			<IDSymbol name="ErrorListMenuGroup" value="0x1020" />
+			<IDSymbol name="wipeerrors" value="0x0100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidSolutionItemCmdSet" value="{d9032052-cbd8-4f67-8352-e183f74e4071}">
+			<IDSymbol name="SolutionItemMenuGroup" value="0x1020" />
+			<IDSymbol name="lint" value="0x0100" />
+			<IDSymbol name="exclude" value="0x0101" />
+			<IDSymbol name="globals" value="0x0102" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidSolutionFolderNodeCmdSet" value="{11ecda11-e5ee-4e59-a4e1-ef9edec80d8f}">
+			<IDSymbol name="SolutionFolderNodeMenuGroup" value="0x1020" />
+			<IDSymbol name="excludeFolder" value="0x0100" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidOptionsCmdSet" value="{b7fe589c-403a-4bfa-88e2-795a77b2d5b3}">
+			<IDSymbol name="OptionsMenuGroup" value="0x1020" />
+			<IDSymbol name="options" value="0x0100" />
+		</GuidSymbol>
+    
+    <!-- 
+       [HKEY_CURRENT_USER\Software\Microsoft\VisualStudio\11.0\General]
+        "EnableVSIPLogging"=dword:00000001
+    Shift+Ctrl Click will show you the Guids
+    -->
+
+    <GuidSymbol name="CMDSETID_JsEdGrp" value="{D309F791-903F-11D0-9EFC-00A0C911004F}">
+      <IDSymbol name="IDM_CTX_SOURCE" value="0x40D" />
+    </GuidSymbol>
+
+    <GuidSymbol name="CMDSETID_CssEdGrp" value="{A764E896-518D-11d2-9A89-00C04F79EFC3}">
+			<IDSymbol name="IDM_CTX_SOURCE" value="0x102" />
+		</GuidSymbol>
+
+		<GuidSymbol name="CMDSETID_HtmEdGrp" value="{d7e8c5e1-bdb8-11d0-9c88-0000f8040a53}">
+			<IDSymbol name="IDMX_HTM_SOURCE_BASIC" value="0x32" />
+			<IDSymbol name="IDMX_HTM_SOURCE_HTML" value="0x33" />
+			<IDSymbol name="IDMX_HTM_SOURCE_SCRIPT" value="0x34" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASPX" value="0x35" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASAX" value="0x3B" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASPX_CODE" value="0x36" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASAX_CODE" value="0x3C" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASPX_CODE_VB" value="0x37" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASAX_CODE_VB" value="0x3D" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASMX_CODE" value="0x38" />
+			<IDSymbol name="IDMX_HTM_SOURCE_ASMX_CODE_VB" value="0x39" />
+		</GuidSymbol>
+
+		<GuidSymbol name="guidImages" value="{fa2d4bf1-c405-49d8-8b29-9a54970b984b}">
+			<IDSymbol name="jslintPic" value="1" />
+		</GuidSymbol>
+	</Symbols>
+
+</CommandTable>
