@@ -1,4 +1,4 @@
-/*! 2.5.11 */
+/*! 2.6.0 */
 var JSHINT;
 if (typeof window === 'undefined') window = {};
 (function () {
@@ -2930,7 +2930,7 @@ if (typeof window === 'undefined') window = {};
 			 * to token() method returning the next token, the Lexer object also
 			 * emits events.
 			 *
-			 *   lex.on("Identifier", function (data) {
+			 *   lex.on("Identifier", function(data) {
 			 *     if (data.name.indexOf("_") >= 0) {
 			 *       // Produce a warning.
 			 *     }
@@ -3015,7 +3015,7 @@ if (typeof window === 'undefined') window = {};
 				 * Underscore.js i.e. you can subscribe to multiple events with
 				 * one call:
 				 *
-				 *   lex.on("Identifier Number", function (data) {
+				 *   lex.on("Identifier Number", function(data) {
 				 *     // ...
 				 *   });
 				 */
@@ -4791,8 +4791,9 @@ if (typeof window === 'undefined') window = {};
 				W123: "'{a}' is already defined in outer scope.",
 				W124: "A generator function shall contain a yield statement.",
 				W125: "This line contains non-breaking spaces: http://jshint.com/doc/options/#nonbsp",
-				W126: "Grouping operator is unnecessary for lone expressions.",
-				W127: "Unexpected use of a comma operator."
+				W126: "Unnecessary grouping operator.",
+				W127: "Unexpected use of a comma operator.",
+				W128: "Empty array elements require elision=true."
 			};
 
 			var info = {
@@ -5125,13 +5126,13 @@ if (typeof window === 'undefined') window = {};
 					undef: true,
 
 					/**
-					 * This option prohibits the use of the grouping operator for
-					 * single-expression statements. This unecessary usage commonly reflects
-					 * a misunderstanding of unary operators, for example:
+					 * This option prohibits the use of the grouping operator when it is not
+					 * strictly required. Such usage commonly reflects a misunderstanding of
+					 * unary operators, for example:
 					 *
 					 *     // jshint singleGroups: true
 					 *
-					 *     delete(obj.attr); // Warning: Grouping operator is unnecessary for lone expressions.
+					 *     delete(obj.attr); // Warning: Unnecessary grouping operator.
 					 */
 					singleGroups: false,
 
@@ -5399,7 +5400,13 @@ if (typeof window === 'undefined') window = {};
 					 * * [Draft Specification for ES.next (ECMA-262 Ed.
 					 *   6)](http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts)
 					 */
-					esnext: true
+					esnext: true,
+
+					/**
+					 * This option tells JSHint that your code uses ES3 array elision elements,
+					 * or empty elements (for example, `[1, , , 4, , , 7]`).
+					 */
+					elision: true,
 				},
 
 				// Third party globals
@@ -6075,11 +6082,13 @@ if (typeof window === 'undefined') window = {};
 				clearTimeout: false,
 				close: false,
 				closed: false,
+				Comment: false,
 				CustomEvent: false,
 				DOMParser: false,
 				defaultStatus: false,
 				Document: false,
 				document: false,
+				DocumentFragment: false,
 				Element: false,
 				ElementTimeControl: false,
 				Event: false,
@@ -6161,6 +6170,7 @@ if (typeof window === 'undefined') window = {};
 				Node: false,
 				NodeFilter: false,
 				NodeList: false,
+				Notification: false,
 				navigator: false,
 				onbeforeunload: true,
 				onblur: true,
@@ -6175,6 +6185,7 @@ if (typeof window === 'undefined') window = {};
 				Option: false,
 				parent: false,
 				print: false,
+				Range: false,
 				requestAnimationFrame: false,
 				removeEventListener: false,
 				resizeBy: false,
@@ -6343,6 +6354,7 @@ if (typeof window === 'undefined') window = {};
 				SVGViewElement: false,
 				SVGViewSpec: false,
 				SVGZoomAndPan: false,
+				Text: false,
 				TextDecoder: false,
 				TextEncoder: false,
 				TimeEvent: false,
@@ -6696,7 +6708,13 @@ if (typeof window === 'undefined') window = {};
 				// Jasmine 1.3
 				runs: false,
 				waitsFor: false,
-				waits: false
+				waits: false,
+				// Jasmine 2.1
+				beforeAll: false,
+				afterAll: false,
+				fail: false,
+				fdescribe: false,
+				fit: false
 			};
 
 		}, {}], "jshint": [function (require, module, exports) {
@@ -7149,8 +7167,7 @@ if (typeof window === 'undefined') window = {};
 								}
 							}
 						} else {
-							if (((!state.option.shadow && !opts.param) ||
-								_.contains(["inner", "outer"], state.option.shadow)) &&
+							if ((!state.option.shadow || _.contains(["inner", "outer"], state.option.shadow)) &&
 								type !== "exception" || funct["(blockscope)"].getlabel(name)) {
 								warning("W004", state.tokens.next, name);
 							}
@@ -7534,6 +7551,10 @@ if (typeof window === 'undefined') window = {};
 					return false;
 				}
 
+				function isBeginOfExpr(prev) {
+					return !prev.left && prev.arity !== "unary";
+				}
+
 				// This is the heart of JSHINT, the Pratt parser. In addition to parsing, it
 				// is looking for ad hoc lint patterns. We add .fud to Pratt's model, which is
 				// like .nud except that it is only used on the first token of a statement.
@@ -7549,8 +7570,7 @@ if (typeof window === 'undefined') window = {};
 				// They are elements of the parsing method called Top Down Operator Precedence.
 
 				function expression(rbp, initial) {
-					var left, isArray = false, isObject = false, isLetExpr = false,
-					  isFatArrowBody = state.tokens.curr.value === "=>";
+					var left, isArray = false, isObject = false, isLetExpr = false;
 
 					state.nameStack.push();
 
@@ -7588,6 +7608,7 @@ if (typeof window === 'undefined') window = {};
 
 					if (initial) {
 						funct["(verb)"] = state.tokens.curr.value;
+						state.tokens.curr.beginsStmt = true;
 					}
 
 					if (initial === true && state.tokens.curr.fud) {
@@ -7640,11 +7661,6 @@ if (typeof window === 'undefined') window = {};
 					}
 					if (isLetExpr) {
 						funct["(blockscope)"].unstack();
-					}
-
-					if (state.option.singleGroups && left && left.paren && !left.exprs &&
-					  !isFatArrowBody && !left.triggerFnExpr) {
-						warning("W126");
 					}
 
 					state.nameStack.pop();
@@ -7758,7 +7774,9 @@ if (typeof window === 'undefined') window = {};
 				}
 
 				function delim(s) {
-					return symbol(s, 0);
+					var x = symbol(s, 0);
+					x.delim = true;
+					return x;
 				}
 
 				function stmt(s, f) {
@@ -7787,8 +7805,8 @@ if (typeof window === 'undefined') window = {};
 					reserveName(x);
 
 					x.nud = (typeof f === "function") ? f : function () {
-						this.right = expression(150);
 						this.arity = "unary";
+						this.right = expression(150);
 
 						if (this.id === "++" || this.id === "--") {
 							if (state.option.plusplus) {
@@ -7871,14 +7889,10 @@ if (typeof window === 'undefined') window = {};
 					var x = symbol(s, 42);
 
 					x.led = function (left) {
-						if (!state.option.esnext) {
-							warning("W119", state.tokens.curr, "arrow function syntax (=>)");
-						}
-
 						nobreaknonadjacent(state.tokens.prev, state.tokens.curr);
 
 						this.left = left;
-						this.right = doFunction(undefined, undefined, false, left);
+						this.right = doFunction(undefined, undefined, false, { loneArg: left });
 						return this;
 					};
 					return x;
@@ -8157,6 +8171,14 @@ if (typeof window === 'undefined') window = {};
 						}
 					} else {
 						error("E030", state.tokens.next, state.tokens.next.value);
+
+						// The token should be consumed after a warning is issued so the parser
+						// can continue as though an identifier were found. The semicolon token
+						// should not be consumed in this way so that the parser interprets it as
+						// a statement delimeter;
+						if (state.tokens.next.id !== ";") {
+							advance();
+						}
 					}
 				}
 
@@ -8206,7 +8228,6 @@ if (typeof window === 'undefined') window = {};
 				}
 
 				function statement() {
-					var values;
 					var i = indent, r, s = scope, t = state.tokens.next;
 
 					if (t.id === ";") {
@@ -8243,22 +8264,6 @@ if (typeof window === 'undefined') window = {};
 						}
 					}
 
-					// detect a destructuring assignment
-					if (_.has(["[", "{"], t.value)) {
-						if (lookupBlockType().isDestAssign) {
-							if (!state.option.inESNext()) {
-								warning("W104", state.tokens.curr, "destructuring expression");
-							}
-							values = destructuringExpression();
-							values.forEach(function (tok) {
-								isundef(funct, "W117", tok.token, tok.id);
-							});
-							advance("=");
-							destructuringExpressionMatch(values, expression(10, true));
-							advance(";");
-							return;
-						}
-					}
 					if (t.identifier && !res && peek().id === ":") {
 						advance();
 						advance(":");
@@ -8579,6 +8584,18 @@ if (typeof window === 'undefined') window = {};
 						var f;
 						var block;
 
+						// If this identifier is the lone parameter to a shorthand "fat arrow"
+						// function definition, i.e.
+						//
+						//     x => x;
+						//
+						// ...it should not be considered as a variable in the current scope. It
+						// will be added to the scope of the new function when the next token is
+						// parsed, so it can be safely ignored for now.
+						if (state.tokens.next.id === "=>") {
+							return this;
+						}
+
 						if (typeof s === "function") {
 							// Protection against accidental inheritance.
 							s = undefined;
@@ -8885,8 +8902,8 @@ if (typeof window === 'undefined') window = {};
 				prefix("+", "num");
 				prefix("+++", function () {
 					warning("W007");
-					this.right = expression(150);
 					this.arity = "unary";
+					this.right = expression(150);
 					return this;
 				});
 				infix("+++", function (left) {
@@ -8899,8 +8916,8 @@ if (typeof window === 'undefined') window = {};
 				prefix("-", "neg");
 				prefix("---", function () {
 					warning("W006");
-					this.right = expression(150);
 					this.arity = "unary";
+					this.right = expression(150);
 					return this;
 				});
 				infix("---", function (left) {
@@ -8939,6 +8956,7 @@ if (typeof window === 'undefined') window = {};
 					if (state.option.bitwise) {
 						warning("W052", this, "~");
 					}
+					this.arity = "unary";
 					expression(150);
 					return this;
 				});
@@ -8955,8 +8973,8 @@ if (typeof window === 'undefined') window = {};
 				});
 
 				prefix("!", function () {
-					this.right = expression(150);
 					this.arity = "unary";
+					this.right = expression(150);
 
 					if (!this.right) { // '!' followed by nothing? Give up.
 						quit("E041", this.line || 0);
@@ -9129,8 +9147,8 @@ if (typeof window === 'undefined') window = {};
 						}
 						if (!left.identifier && left.id !== "." && left.id !== "[" &&
 							left.id !== "(" && left.id !== "&&" && left.id !== "||" &&
-							left.id !== "?" && !(state.option.esnext && left.id === "=>")) {
-							warning("W067", left);
+							left.id !== "?" && !(state.option.esnext && left["(name)"])) {
+							warning("W067", that);
 						}
 					}
 
@@ -9139,14 +9157,14 @@ if (typeof window === 'undefined') window = {};
 				}, 155, true).exps = true;
 
 				prefix("(", function () {
-					var bracket, brackets = [];
-					var pn, pn1, i = 0;
-					var ret, triggerFnExpr;
+					var pn = state.tokens.next, pn1, i = -1;
+					var ret, triggerFnExpr, first, last;
 					var parens = 1;
+					var opening = state.tokens.curr;
+					var preceeding = state.tokens.prev;
+					var isNecessary = !state.option.singleGroups;
 
 					do {
-						pn = peek(i);
-
 						if (pn.value === "(") {
 							parens += 1;
 						} else if (pn.value === ")") {
@@ -9154,28 +9172,27 @@ if (typeof window === 'undefined') window = {};
 						}
 
 						i += 1;
-						pn1 = peek(i);
-					} while (!(parens === 0 && pn.value === ")") &&
-							 pn1.value !== "=>" && pn1.value !== ";" && pn1.type !== "(end)");
+						pn1 = pn;
+						pn = peek(i);
+					} while (!(parens === 0 && pn1.value === ")") && pn.value !== ";" && pn.type !== "(end)");
 
 					if (state.tokens.next.id === "function") {
 						triggerFnExpr = state.tokens.next.immed = true;
+					}
+
+					// If the balanced grouping operator is followed by a "fat arrow", the
+					// current token marks the beginning of a "fat arrow" function and parsing
+					// should proceed accordingly.
+					if (pn.value === "=>") {
+						return doFunction(null, null, null, { parsedParen: true });
 					}
 
 					var exprs = [];
 
 					if (state.tokens.next.id !== ")") {
 						for (; ;) {
-							if (pn1.value === "=>" && _.contains(["{", "["], state.tokens.next.value)) {
-								bracket = state.tokens.next;
-								bracket.left = destructuringExpression();
-								brackets.push(bracket);
-								for (var t in bracket.left) {
-									exprs.push(bracket.left[t].token);
-								}
-							} else {
-								exprs.push(expression(10));
-							}
+							exprs.push(expression(10));
+
 							if (state.tokens.next.id !== ",") {
 								break;
 							}
@@ -9191,22 +9208,52 @@ if (typeof window === 'undefined') window = {};
 						}
 					}
 
-					if (state.tokens.next.value === "=>") {
-						return exprs;
-					}
 					if (!exprs.length) {
 						return;
 					}
 					if (exprs.length > 1) {
 						ret = Object.create(state.syntax[","]);
 						ret.exprs = exprs;
+
+						first = exprs[0];
+						last = exprs[exprs.length - 1];
+
+						if (!isNecessary) {
+							isNecessary = preceeding.assign || preceeding.delim;
+						}
 					} else {
-						ret = exprs[0];
+						ret = first = last = exprs[0];
+
+						if (!isNecessary) {
+							isNecessary =
+							  // Used to distinguish from an ExpressionStatement which may not
+							  // begin with the `{` and `function` tokens
+							  (opening.beginsStmt && (ret.id === "{" || triggerFnExpr || isFunctor(ret))) ||
+							  // Used as the return value of a single-statement arrow function
+							  (ret.id === "{" && preceeding.id === "=>") ||
+							  // Used to prevent left-to-right application of adjacent addition
+							  // operators (the order of which effect type)
+							  (first.id === "+" && preceeding.id === "+");
+						}
 					}
+
 					if (ret) {
+						// The operator may be necessary to override the default binding power of
+						// neighboring operators (whenever there is an operator in use within the
+						// first expression *or* the current group contains multiple expressions)
+						if (!isNecessary && (first.left || ret.exprs)) {
+							isNecessary =
+							  (!isBeginOfExpr(preceeding) && first.lbp < preceeding.lbp) ||
+							  (!isEndOfExpr() && last.lbp < state.tokens.next.lbp);
+						}
+
+						if (!isNecessary) {
+							warning("W126");
+						}
+
 						ret.paren = true;
-						ret.triggerFnExpr = triggerFnExpr;
 					}
+
 					return ret;
 				});
 
@@ -9311,8 +9358,19 @@ if (typeof window === 'undefined') window = {};
 					}
 					while (state.tokens.next.id !== "(end)") {
 						while (state.tokens.next.id === ",") {
-							if (!state.option.inES5())
-								warning("W070");
+							if (!state.option.elision) {
+								if (!state.option.inES5()) {
+									// Maintain compat with old options --- ES5 mode without
+									// elision=true will warn once per comma
+									warning("W070");
+								} else {
+									warning("W128");
+									do {
+										advance(",");
+									} while (state.tokens.next.id === ",");
+									continue;
+								}
+							}
 							advance(",");
 						}
 
@@ -9384,40 +9442,25 @@ if (typeof window === 'undefined') window = {};
 					return id;
 				}
 
-				function functionparams(parsed) {
-					var curr, next;
+				function functionparams(fatarrow) {
+					var next;
 					var params = [];
 					var ident;
 					var tokens = [];
 					var t;
 					var pastDefault = false;
+					var loneArg = fatarrow && fatarrow.loneArg;
 
-					if (parsed) {
-						if (Array.isArray(parsed)) {
-							for (var i in parsed) {
-								curr = parsed[i];
-								if (curr.value === "...") {
-									if (!state.option.esnext) {
-										warning("W119", curr, "spread/rest operator");
-									}
-									continue;
-								} else if (curr.value !== ",") {
-									params.push(curr.value);
-									addlabel(curr.value, { type: "unused", token: curr, param: true });
-								}
-							}
-							return params;
-						} else {
-							if (parsed.identifier === true) {
-								addlabel(parsed.value, { type: "unused", token: parsed, param: true });
-								return [parsed];
-							}
-						}
+					if (loneArg && loneArg.identifier === true) {
+						addlabel(loneArg.value, { type: "unused", token: loneArg });
+						return [loneArg];
 					}
 
 					next = state.tokens.next;
 
-					advance("(");
+					if (!fatarrow || !fatarrow.parsedParen) {
+						advance("(");
+					}
 
 					if (state.tokens.next.id === ")") {
 						advance(")");
@@ -9431,7 +9474,7 @@ if (typeof window === 'undefined') window = {};
 								t = tokens[t];
 								if (t.id) {
 									params.push(t.id);
-									addlabel(t.id, { type: "unused", token: t.token, param: true });
+									addlabel(t.id, { type: "unused", token: t.token });
 								}
 							}
 						} else if (state.tokens.next.value === "...") {
@@ -9441,11 +9484,11 @@ if (typeof window === 'undefined') window = {};
 							advance("...");
 							ident = identifier(true);
 							params.push(ident);
-							addlabel(ident, { type: "unused", token: state.tokens.curr, param: true });
+							addlabel(ident, { type: "unused", token: state.tokens.curr });
 						} else {
 							ident = identifier(true);
 							params.push(ident);
-							addlabel(ident, { type: "unused", token: state.tokens.curr, param: true });
+							addlabel(ident, { type: "unused", token: state.tokens.curr });
 						}
 
 						// it is a syntax error to have a regular argument after a default argument
@@ -9527,6 +9570,10 @@ if (typeof window === 'undefined') window = {};
 					return funct;
 				}
 
+				function isFunctor(token) {
+					return "(scope)" in token;
+				}
+
 				function doTemplateLiteral() {
 					while (state.tokens.next.type !== "(template tail)" && state.tokens.next.id !== "(end)") {
 						advance();
@@ -9543,7 +9590,18 @@ if (typeof window === 'undefined') window = {};
 					};
 				}
 
-				function doFunction(name, statement, generator, fatarrowparams) {
+				/**
+				 * @param {Object} [fatarrow] In the case that the function being parsed
+				 *                            takes the "fat arrow" form, this object will
+				 *                            contain details about the in-progress parsing
+				 *                            operation.
+				 * @param {Token} [fatarrow.loneArg] The argument to the function in cases
+				 *                                   where it was defined using the single-
+				 *                                   argument shorthand.
+				 * @param {bool} [fatarrow.parsedParen] Whether the opening parenthesis has
+				 *                                      already been parsed.
+				 */
+				function doFunction(name, statement, generator, fatarrow) {
 					var f;
 					var oldOption = state.option;
 					var oldIgnored = state.ignored;
@@ -9568,19 +9626,20 @@ if (typeof window === 'undefined') window = {};
 						addlabel(name, { type: "function" });
 					}
 
-					funct["(params)"] = functionparams(fatarrowparams);
+					funct["(params)"] = functionparams(fatarrow);
 					funct["(metrics)"].verifyMaxParametersPerFunction(funct["(params)"]);
 
-					// So we parse fat-arrow functions after we encounter =>. So basically
-					// doFunction is called with the left side of => as its last argument.
-					// This means that the parser, at that point, had already added its
-					// arguments to the undefs array and here we undo that.
+					if (fatarrow) {
+						if (!state.option.esnext) {
+							warning("W119", state.tokens.curr, "arrow function syntax (=>)");
+						}
 
-					JSHINT.undefs = _.filter(JSHINT.undefs, function (item) {
-						return !_.contains(_.union(fatarrowparams), item[2]);
-					});
+						if (!fatarrow.loneArg) {
+							advance("=>");
+						}
+					}
 
-					block(false, true, true, fatarrowparams ? true : false);
+					block(false, true, true, !!fatarrow);
 
 					if (!state.option.noyield && generator &&
 						funct["(generator)"] !== "yielded") {
@@ -10148,6 +10207,7 @@ if (typeof window === 'undefined') window = {};
 				function classbody(c) {
 					var name;
 					var isStatic;
+					var isGenerator;
 					var getset;
 					var props = {};
 					var staticProps = {};
@@ -10155,7 +10215,13 @@ if (typeof window === 'undefined') window = {};
 					for (var i = 0; state.tokens.next.id !== "}"; ++i) {
 						name = state.tokens.next;
 						isStatic = false;
+						isGenerator = false;
 						getset = null;
+						if (name.id === "*") {
+							isGenerator = true;
+							advance("*");
+							name = state.tokens.next;
+						}
 						if (name.id === "[") {
 							name = computedPropertyName();
 						} else if (isPropertyName(name)) {
@@ -10163,6 +10229,10 @@ if (typeof window === 'undefined') window = {};
 							advance();
 							computed = false;
 							if (name.identifier && name.value === "static") {
+								if (checkPunctuators(state.tokens.next, ["*"])) {
+									isGenerator = true;
+									advance("*");
+								}
 								if (isPropertyName(state.tokens.next) || state.tokens.next.id === "[") {
 									computed = state.tokens.next.id === "[";
 									isStatic = true;
@@ -10225,7 +10295,7 @@ if (typeof window === 'undefined') window = {};
 
 						propertyName(name);
 
-						doFunction(null, c, false, null);
+						doFunction(null, c, isGenerator, null);
 					}
 
 					checkProperties(props);
@@ -10606,8 +10676,7 @@ if (typeof window === 'undefined') window = {};
 					do {
 						nextop = peek(i);
 						++i;
-					} while (!_.contains(inof, nextop.value) && nextop.value !== ";" &&
-						  nextop.type !== "(end)");
+					} while (!_.contains(inof, nextop.value) && nextop.value !== ";" && nextop.type !== "(end)");
 
 					// if we're in a for (… in|of …) statement
 					if (_.contains(inof, nextop.value)) {
@@ -11817,7 +11886,7 @@ if (typeof window === 'undefined') window = {};
 								unused_opt = func["(unusedOption)"] || state.option.unused;
 								unused_opt = unused_opt === true ? "last-param" : unused_opt;
 
-								// 'undefined' is a special case for (function (window, undefined) { ... })();
+								// 'undefined' is a special case for (function(window, undefined) { ... })();
 								// patterns.
 
 								if (param === "undefined")
