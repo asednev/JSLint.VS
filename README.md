@@ -4,7 +4,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/c469mcfnjxn9wdar/branch/master?svg=true)](https://ci.appveyor.com/project/asednev/jslint-vs/branch/master)
 
 <strong>JSLint</strong> version 2014-07-08<br />
-<strong>JSHint</strong> version 2.5.11
+<strong>JSHint</strong> version 2.6.0
 
 Features:
 
